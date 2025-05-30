@@ -1,0 +1,99 @@
+# ☁️ XP Inc. | Azure - Máquinas Virtuais
+
+Anotações do curso **Cloud com Inteligência Artificial (XP Inc.)** focadas na criação e gerenciamento de máquinas virtuais na **Microsoft Azure**.
+
+---
+
+## 🧠 Visão Geral
+
+### O que é a Azure?
+Plataforma de nuvem da Microsoft com +200 serviços. Permite criar, hospedar e gerenciar recursos como máquinas virtuais, redes, bancos de dados, entre outros.
+
+### Conceitos base:
+- **Resource Group**: Conjunto lógico que agrupa recursos (VMs, redes, discos).
+- **Região**: Local físico (ex: *Brazil South*) onde os recursos são criados.
+- **Subscription**: Plano de uso da Azure; controla os limites e cobranças.
+
+---
+
+## 💻 Criando uma VM do zero
+
+### Etapas principais:
+1. Acessar o [portal.azure.com](https://portal.azure.com)
+2. Buscar por “Máquinas Virtuais” e clicar em **Criar**
+3. Preencher:
+   - **RG**: Ex: `meu-grupo`
+   - **Nome da VM**: `vm-luigi`
+   - **Região**: `Brazil South`
+   - **Imagem**: Ubuntu 22.04 ou Windows Server
+   - **Tamanho**: Standard B1s (1 vCPU, 1GB RAM) — ideal para testes
+   - **Autenticação**: SSH (Linux) ou senha (Windows)
+
+4. Selecionar disco (padrão: SSD Premium)
+5. Configurar rede e segurança:
+   - IP público automático
+   - Abrir portas: 22 (SSH), 3389 (RDP)
+6. Revisar e criar ✅
+
+---
+
+## 🛠️ Gerenciamento de VMs
+
+### Ações comuns:
+- Iniciar / Parar / Reiniciar direto do portal
+- Conectar:
+  - Linux: `ssh azureuser@ip_da_vm`
+  - Windows: RDP com IP e senha
+
+### Dicas:
+- **IPs dinâmicos mudam** quando a VM reinicia → usar IP estático se necessário
+- Usar **nome DNS** para facilitar acesso (ex: `luigi-vm.brazilsouth.cloudapp.azure.com`)
+
+---
+
+## 💾 Discos e Armazenamento
+
+- **Disco do SO**: Vem por padrão com a VM
+- **Disco de dados**: Pode ser adicionado para armazenar arquivos grandes
+- Tipos:
+  - HDD (mais barato)
+  - SSD (mais rápido)
+  - Premium SSD (para produção)
+
+---
+
+## 🔐 Segurança
+
+- **NSG (Network Security Group)**: controla quais portas estão abertas
+- Sempre revisar regras (ex: porta 22 aberta para todos = risco!)
+- Recomendado: limitar acesso por IP
+
+---
+
+## 🧠 Integração com IA
+
+Durante o curso, aprendi que:
+- Podemos usar VMs para hospedar modelos de IA ou consumir APIs cognitivas da própria Azure
+- Exemplo: rodar um modelo de NLP dentro de uma VM Ubuntu, conectando com Azure Cognitive Services
+
+---
+
+## 🧪 CLI - Comandos úteis
+
+```bash
+# Login
+az login
+
+# Criar Resource Group
+az group create --name meu-grupo --location brazilsouth
+
+# Criar VM Linux
+az vm create \
+  --resource-group meu-grupo \
+  --name vm-luigi \
+  --image UbuntuLTS \
+  --admin-username luigi \
+  --generate-ssh-keys
+
+# Abrir porta SSH
+az vm open-port -
