@@ -1,0 +1,64 @@
+# 🗄️ XP Inc. | Azure - Configuração de Banco de Dados
+
+Repositório criado como entregável do desafio do curso **XP Inc. | Cloud com Inteligência Artificial**, com foco em **praticar o processo de configuração de uma instância de Banco de Dados** na plataforma Microsoft Azure.
+
+---
+
+## 📚 O que aprendi
+
+### ☁️ Azure SQL Database – Visão Geral
+- É o serviço de banco de dados relacional da Azure baseado no SQL Server.
+- Gerenciado pela própria Microsoft (modelo PaaS), ou seja, sem precisar instalar/manter servidor manualmente.
+- Alta disponibilidade, backups automáticos, escalabilidade e segurança integrada.
+
+---
+
+## ⚙️ Criando uma instância de banco
+
+### Passo a passo pelo portal Azure:
+1. Acessar o [portal.azure.com](https://portal.azure.com)
+2. Buscar por **Azure SQL** > "Criar banco de dados SQL"
+3. Preencher:
+   - **Grupo de recursos** (ex: `grupo-db-luigi`)
+   - **Nome do banco** (ex: `bd-clientes`)
+   - **Servidor lógico**: criar um novo (ex: `sqlserverluigi`)
+     - Usuário admin: `adminluigi`
+     - Senha: (escolha forte)
+   - **Tipo de compra**: `Uso geral` ou `Desenvolvimento/Testes`
+   - **Nível de desempenho**: DTU ou vCore (comecei com DTU básico pra testes)
+4. Definir regras de firewall para permitir IP de acesso
+5. Revisar e criar
+
+---
+
+## 🧪 Comandos úteis (Azure CLI)
+
+```bash
+# Login na Azure
+az login
+
+# Criar grupo de recursos
+az group create --name grupo-db-luigi --location brazilsouth
+
+# Criar servidor lógico de SQL
+az sql server create \
+  --name sqlserverluigi \
+  --resource-group grupo-db-luigi \
+  --location brazilsouth \
+  --admin-user adminluigi \
+  --admin-password MinhaSenha123!
+
+# Criar banco de dados
+az sql db create \
+  --resource-group grupo-db-luigi \
+  --server sqlserverluigi \
+  --name bd-clientes \
+  --service-objective S0
+
+# Permitir IP local no firewall
+az sql server firewall-rule create \
+  --resource-group grupo-db-luigi \
+  --server sqlserverluigi \
+  --name permitir-meu-ip \
+  --start-ip-address 0.0.0.0 \
+  --end-ip-address 255.255.255.255
